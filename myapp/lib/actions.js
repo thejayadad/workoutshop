@@ -5,6 +5,7 @@
     import { revalidatePath } from "next/cache";
     import { redirect } from "next/navigation";
     import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+    import Exercise from "@/models/Exercise";
 
     export const addWorkout = async (formData) => {
         const getUser = await getServerUser(authOptions)
@@ -29,3 +30,45 @@
         redirect("/")
 
     }
+
+
+    export const updateExerciseWorkout = async (formData) => {
+        const getUser = await getServerUser(authOptions);
+        const creator = getUser._id;
+        console.log("Creator " + creator);
+        if (!getUser) throw new Error("Unauthorized!");
+      
+        const { type,  name, duration, distance, intensity, notes, id } =
+          Object.fromEntries(formData);
+      
+        try {
+          db.connect();
+          
+          const workout = await Workout.findById(id);
+      
+          if (!workout) {
+            throw new Error("Workout not found");
+          }
+      
+          const exercise = new Exercise({
+            type,
+            name,
+            duration,
+            distance,
+            intensity,
+            notes,
+            creator,
+          });
+      
+      
+          workout.exercises.push(exercise);
+      
+          await workout.save();
+        } catch (err) {
+          console.log(err);
+          throw new Error("Failed to update workout with exercise " + err);
+        }
+      
+        revalidatePath("/");
+        redirect("/");
+      };
