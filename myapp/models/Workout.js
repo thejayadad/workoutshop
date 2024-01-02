@@ -13,11 +13,7 @@ const WorkoutSchema = new mongoose.Schema({
         type: String,
         enum: ['strength', 'cardio'],
       }, 
-      exercises: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: "Exercise",
-        default: []
-      }
+      exercises: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Exercise' }],
 }, {timestamps: true})
 
 export default mongoose?.models?.Workout || mongoose.model("Workout", WorkoutSchema)

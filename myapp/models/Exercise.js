@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const ExerciseSchema = new mongoose.Schema({
-    type: {
+    location: {
         type: String,
         enum: ['other', 'indoor', 'outdoor', 'gym'],
         required: true,

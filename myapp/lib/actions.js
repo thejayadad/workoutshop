@@ -38,7 +38,7 @@
         console.log("Creator " + creator);
         if (!getUser) throw new Error("Unauthorized!");
       
-        const { type,  name, duration, distance, intensity, notes, id } =
+        const { location,  name, duration, distance, intensity, notes, id } =
           Object.fromEntries(formData);
       
         try {
@@ -51,7 +51,7 @@
           }
       
           const exercise = new Exercise({
-            type,
+            location,
             name,
             duration,
             distance,
@@ -62,7 +62,8 @@
       
       
           workout.exercises.push(exercise);
-      
+          await exercise.save()
+
           await workout.save();
         } catch (err) {
           console.log(err);
